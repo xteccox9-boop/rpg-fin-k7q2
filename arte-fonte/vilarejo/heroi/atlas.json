@@ -1,0 +1,30 @@
+{
+  "format": "pixel-art-studio-atlas-v1",
+  "name": "heroi-assassino",
+  "image": "atlas.png",
+  "canvas": [
+    64,
+    104
+  ],
+  "size": [
+    64,
+    104
+  ],
+  "padding": 1,
+  "frames": [
+    {
+      "name": "heroi-assassino",
+      "rect": [
+        0,
+        0,
+        64,
+        104
+      ],
+      "duration_ms": 100,
+      "pivot": [
+        32,
+        104
+      ]
+    }
+  ]
+}
