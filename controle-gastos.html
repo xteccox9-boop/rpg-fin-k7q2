@@ -1002,6 +1002,13 @@ button.primary{font-size:22px!important}
 #tav .tvnav>button{color:#ffd98a!important}
 #tav .tvnav>button:active{transform:translateY(2px)}
 /* ===== fim Taverna ===== */
+/* ===== Números legíveis: letras em Pixelify Sans, dígitos 0-9 em VT323 (na Pixelify o 2, 3 e 5 parecem 8/S) =====
+   "Digitos" só cobre U+0030-0039, então o resto do texto cai na Pixelify; size-adjust alinha com as letras. */
+@font-face{font-family:"Digitos";src:url(https://fonts.gstatic.com/s/vt323/v18/pxiKyp0ihIEF2isfFJU.woff2) format("woff2");unicode-range:U+0030-0039;size-adjust:132%;font-display:swap}
+:root{--fb:"Digitos","Pixelify Sans",system-ui,sans-serif}
+/* a ligadura "fi" da Pixelify parece um "A" ("Parcelas fixas" virava "Axas"): desliga ligaduras */
+body,body *{font-variant-ligatures:none;font-feature-settings:"liga" 0,"clig" 0}
+.npanel .amt span,.npanel .amt input,.npanel #desc,.npanel .dil,.npanel #dilN,.npanel #dilT,.hp,.hp-ov-s{font-family:"Digitos","Pixelify Sans",sans-serif!important}
 </style>
 </head>
 <body data-v="novo">
