@@ -110,6 +110,20 @@ for y in range(PY0 + 3, PY1 - 2):
     for x in range(PX0 + 3, PX1 - 2):
         t.px(x, y, {"h": "g", "i": "g"}.get(t.get(x, y), t.get(x, y)))
 
+# cópia só da placa + correntes (fundo transparente), antes do balcão e das canecas
+import copy
+so = copy.deepcopy(t)
+for y in range(H):
+    for x in range(W):
+        na_placa = PX0 - 1 <= x <= PX1 + 1 and PY0 - 1 <= y <= PY1 + 1
+        corrente = y < PY0 and 5 <= y and x in (PX0 + 12, PX0 + 13, PX1 - 12, PX1 - 11)
+        if not (na_placa or corrente): so.g[y][x] = "."
+for row in so.g: pass
+placa_src = so.fonte("taverna-placa", P)
+placa_src["canvas"] = [W, PY1 + 2]
+placa_src["frames"][0]["rows"] = placa_src["frames"][0]["rows"][:PY1 + 2]
+json.dump(placa_src, open(os.path.join(os.path.dirname(sys.argv[1]) or ".", "placa-source.json"), "w"), indent=0)
+
 # balcão com canecas
 t.rect(0, 50, W - 1, 51, "i"); t.rect(0, 52, W - 1, 52, "h")
 for y in range(53, H):

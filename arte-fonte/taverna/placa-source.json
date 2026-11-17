@@ -1,0 +1,70 @@
+{
+"version": 1,
+"name": "taverna-placa",
+"canvas": [
+188,
+44
+],
+"palette": {
+"4": "#120c14",
+"f": "#3a2210",
+"g": "#6b4223",
+"h": "#94603a",
+"i": "#c08850",
+"u": "#2a2730",
+"v": "#5a5560",
+"w": "#9a95a4"
+},
+"frames": [
+{
+"name": "taverna-placa",
+"duration_ms": 100,
+"rows": [
+"............................................................................................................................................................................................",
+"............................................................................................................................................................................................",
+"............................................................................................................................................................................................",
+"............................................................................................................................................................................................",
+"............................................................................................................................................................................................",
+"..............................................................wu.............................................................wu.............................................................",
+"..............................................................vv.............................................................vv.............................................................",
+"..............................................................wu.............................................................wu.............................................................",
+"..............................................................wu.............................................................wu.............................................................",
+"..............................................................vv.............................................................vv.............................................................",
+"..............................................................wu.............................................................wu.............................................................",
+"..............................................................wu.............................................................wu.............................................................",
+".................................................444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444.................................................",
+".................................................4iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiif4.................................................",
+".................................................4igggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggff4.................................................",
+".................................................4igffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffgf4.................................................",
+".................................................4igfggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfgggfgf4.................................................",
+".................................................4igfgggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfgggggggggggggggfgf4.................................................",
+".................................................4igfggwgggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfgggggwggfgf4.................................................",
+".................................................4ifffffuffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffuffff4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfgf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ifffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff4.................................................",
+".................................................4igfggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggfgf4.................................................",
+".................................................4iffgggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfgggggggfgf4.................................................",
+".................................................4igfgggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggffgf4.................................................",
+".................................................4igfggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggfgf4.................................................",
+".................................................4igffggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfgggggfgf4.................................................",
+".................................................4igfgggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfgggggggggggggggggfff4.................................................",
+".................................................4ifffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4igfggwggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggwggfhf4.................................................",
+".................................................4ihfggguggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggugfhf4.................................................",
+".................................................4ihfggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggfhf4.................................................",
+".................................................4ifffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff4.................................................",
+".................................................4igggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggggggggggggggfggggggf4.................................................",
+".................................................4ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff4.................................................",
+".................................................444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444................................................."
+]
+}
+]
+}
