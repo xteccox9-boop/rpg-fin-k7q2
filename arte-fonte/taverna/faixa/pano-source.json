@@ -1,0 +1,52 @@
+{
+"version": 1,
+"name": "pano",
+"canvas": [
+32,
+26
+],
+"palette": {
+"G": "#cd683d",
+"a": "#6e2727",
+"b": "#b33831",
+"c": "#ea4f36",
+"d": "#f57d4a",
+"g": "#f9c22b",
+"h": "#fbb954",
+"o": "#2e222f"
+},
+"frames": [
+{
+"name": "pano",
+"duration_ms": 100,
+"rows": [
+".oooooooooooooooooooooooooooooo.",
+"oddddddddddddddddddddddddddddddo",
+"obbbbbbbbbbbbbbbbbbbbbbbbbbbbbbo",
+"oggbbggbbggbbggbbggbbggbbggbbggo",
+"oaaaaaaaaaaaaaaaaaaaaaaaaaaaaaao",
+"ocbbbbbbbcbbbbbbbcbbbbbbbcbbbbbo",
+"ocbbbbbbbcbbbbbbbcbbbbbbbcbbbbbo",
+"ocbbbbbbbcbbbbbbbcbbbbbbbcbbbbbo",
+"ocbbbbbbbcbbbbbbbcbbbbbbbcbbbbbo",
+"ocbbbbbbbcbbbbbbbcbbbbbbbcbbbbbo",
+"ocbbbbbbbcbbbbbbbcbbbbbbbcbbbbbo",
+"ocbbbabbbcbbbabbbcbbbabbbcbbbabo",
+"ocbbbabbbcbbbabbbcbbbabbbcbbbabo",
+"ocbbbabbbcbbbabbbcbbbabbbcbbbabo",
+"ocbbbabbbcbbbabbbcbbbabbbcbbbabo",
+"ocbbbabbbcbbbabbbcbbbabbbcbbbabo",
+"obbbbabbbbbbbabbbbbbbabbbbbbbabo",
+"oaaaaaaaaaaaaaaaaaaaaaaaaaaaaaao",
+"ohhgggggghhgggggghhgggggghhggggo",
+"oGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGo",
+"obbbbabbbbbbbabbbbbbbabbbbbbbabo",
+"obbbbabbbbbbbabbbbbbbabbbbbbbabo",
+"obbbaaaoobbbaaaoobbbaaaoobbbaaao",
+".obbaao..obbaao..obbaao..obbaao.",
+"..obao....obao....obao....obao..",
+"...oo......oo......oo......oo..."
+]
+}
+]
+}

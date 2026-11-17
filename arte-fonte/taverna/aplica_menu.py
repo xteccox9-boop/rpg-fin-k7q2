@@ -16,6 +16,9 @@ def frames(pasta):
     return {f["name"]: atlas.crop((f["rect"][0], f["rect"][1], f["rect"][0] + f["rect"][2], f["rect"][1] + f["rect"][3])) for f in meta["frames"]}
 
 selos = frames("selos"); ico = frames("icones")
+def peca(*caminho): return png_uri(Image.open(os.path.join(base, *caminho)).convert("RGBA"))
+BAL_CORPO, BAL_RABO = peca("balao", "balao-corpo.png"), peca("balao", "balao-rabo.png")
+PANO, CORDA = peca("faixa", "pano.png"), peca("faixa", "corda.png")
 fundo = Image.open(os.path.join(base, "fundo2", "quadro-01.png")).convert("RGBA")
 fundo_uri = png_uri(fundo)
 r, g, b, _ = fundo.getpixel((fundo.width // 2, fundo.height - 1))
@@ -53,11 +56,14 @@ if i >= 0:
 css = f"""/* ===== Taverna: cenário do taverneiro + navegação inferior em pixel art ===== */
 #tav{{--tavAnim:url({fundo_uri});--tavParada:url({fundo_uri});--tvSelo:url({png_uri(selos["normal"])});--tvSeloSel:url({png_uri(selos["selecionado"])});
  --tvPerg:{PERG};--tinta:#2b1a0e;--tinta2:#5a3a1e;
+ --tvBalC:url({BAL_CORPO});--tvBalR:url({BAL_RABO});--tvPano:url({PANO});--tvCorda:url({CORDA});
  display:flex;flex-direction:column;
  /* espaço do cenário: até o balcão (90% da largura), mas encolhe em telas baixas para o resto caber */
  --tvEsp:min(calc(100vw * .9),calc(var(--H,100dvh) - 370px));
- height:calc(var(--H,100dvh) - 100px - env(safe-area-inset-bottom,0px))}}
-#pg-gastos{{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}}
+ --tvDock:calc(100px + env(safe-area-inset-bottom,0px));
+ /* a Taverna vai até o fim da tela: o conteúdo passa por baixo da roda */
+ height:var(--H,100dvh)}}
+#pg-gastos{{padding-bottom:0!important}}
 /* a imagem sobe junto quando o espaço encolhe, mantendo o balcão alinhado com a faixa do mês */
 #tav .tavbg{{background:var(--tavAnim) center calc(var(--tvEsp) - 100vw * .9)/100% auto no-repeat,{cor_baixo}!important;
  position:absolute!important;inset:0 -10px!important;height:auto!important;margin:0!important;z-index:0}}
@@ -68,9 +74,24 @@ css = f"""/* ===== Taverna: cenário do taverneiro + navegação inferior em pix
 /* o taverneiro e o balcão ficam livres; a faixa do mês fica sempre na mesma altura */
 #tav .tvhead{{position:relative;flex:none;height:var(--tvEsp);padding:0!important;margin:0!important}}
 #tav .tvhead>*:not(.tvbalao){{display:none!important}}
-#tav .tvnav{{flex:none;margin:0 0 10px!important}}
-#tvBody{{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;display:flex;flex-direction:column;gap:12px;padding:2px 2px 78px}}
+#tvBody{{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;display:flex;flex-direction:column;gap:12px;padding:2px 2px calc(var(--tvDock) + 80px)}}
+
+/* faixa vermelha pendurada (no lugar da placa do mês), amarrada por cordas nas laterais */
+#tav .tvnav{{flex:none;position:relative;margin:0 22px 6px!important;padding:5px 4px 16px;gap:4px;
+ border-style:solid;border-width:0;border-image:var(--tvPano) 7 8 9 8 fill/14px 16px 18px 16px round;
+ image-rendering:pixelated;image-rendering:crisp-edges;filter:drop-shadow(0 4px 0 rgba(20,10,16,.45))}}
+#tav .tvnav::before,#tav .tvnav::after{{content:"";position:absolute;top:-32px;left:-17px;width:28px;height:44px;pointer-events:none;
+ background:var(--tvCorda) 0 0/28px 44px no-repeat;image-rendering:pixelated;image-rendering:crisp-edges}}
+#tav .tvnav::after{{left:auto;right:-17px;transform:scaleX(-1)}}
+#tav .tvnav>.tvm{{flex:1;min-width:0;background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;padding:0!important;text-align:center}}
+#tav .tvnav>.tvm::before,#tav .tvnav>.tvm::after{{display:none!important}}
+#tav .tvnav>.tvm b{{color:#ffd98a!important;font-size:22px!important;text-shadow:0 2px 0 #2e222f!important}}
+#tav .tvnav>.tvm small{{color:#fdcbb0!important;text-shadow:0 1px 0 #2e222f!important}}
+#tav .tvnav>button{{width:30px!important;height:34px!important;background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;
+ color:#fbb954!important;font-size:30px!important;text-shadow:0 2px 0 #2e222f!important}}
+#tav .tvnav>button::before{{display:none!important}}
 #tvBody::-webkit-scrollbar{{display:none}}
+#tvBody{{-webkit-mask-image:linear-gradient(transparent,#000 14px);mask-image:linear-gradient(transparent,#000 14px)}}
 #tav .tvcols{{display:contents}}
 #tvBody .tvp{{margin:0!important}}
 #tvBody .tvp:not(.tvVis){{display:none!important}}
@@ -102,10 +123,11 @@ css = f"""/* ===== Taverna: cenário do taverneiro + navegação inferior em pix
 
 /* navegação inferior: ícones em lacres de cera, sem texto, colados na roda */
 /* os lacres flutuam sobre o conteúdo: o pergaminho continua por trás deles, desfocado */
-#tav>.tvmenu{{position:absolute;left:0;right:0;bottom:2px;z-index:3;display:grid;grid-template-columns:repeat(5,1fr);justify-items:center;margin:0;padding:0}}
-.tvmenu::before{{content:"";position:absolute;left:-10px;right:-10px;top:-16px;bottom:-2px;z-index:-1;pointer-events:none;
- -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);background:rgba(30,20,26,.15);
- -webkit-mask-image:linear-gradient(transparent,#000 45%);mask-image:linear-gradient(transparent,#000 45%)}}
+#tav>.tvmenu{{position:absolute;left:0;right:0;bottom:calc(var(--tvDock) + 2px);z-index:3;display:grid;grid-template-columns:repeat(5,1fr);justify-items:center;margin:0;padding:0}}
+/* desfoque escurecido atrás dos lacres e da roda, até o fim da tela */
+.tvmenu::before{{content:"";position:absolute;left:-10px;right:-10px;top:-22px;bottom:calc(-2px - var(--tvDock));z-index:-1;pointer-events:none;
+ -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);background:rgba(22,13,20,.55);
+ -webkit-mask-image:linear-gradient(transparent,#000 22%);mask-image:linear-gradient(transparent,#000 22%)}}
 .tvmb{{position:relative;width:60px!important;height:60px;min-height:0!important;padding:0!important;display:grid;place-items:center;border:0!important;border-radius:50%!important;
  background:var(--tvSelo) center/60px 60px no-repeat!important;box-shadow:none!important;image-rendering:pixelated;image-rendering:crisp-edges;cursor:pointer;-webkit-tap-highlight-color:transparent;
  filter:drop-shadow(0 3px 0 rgba(0,0,0,.55));transition:transform .08s ease-out,filter .15s ease-out}}
@@ -119,14 +141,15 @@ css = f"""/* ===== Taverna: cenário do taverneiro + navegação inferior em pix
 .tvmb:focus-visible{{outline:3px solid #ffd98a;outline-offset:2px}}
 @media (max-height:700px){{.tvmb{{width:52px!important;height:52px}}.tvmb,.tvmb.sel{{background-size:52px 52px!important}}.tvmb img{{width:28px;height:28px}}}}
 
-/* balão de fala do taverneiro */
-.tvbalao{{position:absolute;z-index:4;left:54%;right:3%;top:calc(100vw * .3 + var(--tvEsp) - 100vw * .9);padding:9px 13px 10px;
- background:#fff3d6;color:#2b1a0e;font:400 12px/1.25 var(--fb);text-shadow:none;pointer-events:none;
- border:2px solid #2b1a0e;border-radius:16px;box-shadow:0 4px 0 rgba(0,0,0,.3);
+/* balão de fala do taverneiro: balão em pixel art (corpo em 9 fatias + rabinho), em 2x */
+.tvbalao{{position:absolute;z-index:4;left:54%;right:3%;top:calc(100vw * .3 + var(--tvEsp) - 100vw * .9);padding:10px 14px 12px;
+ background:none;color:#2e222f;font:400 12px/1.25 var(--fb);text-shadow:none;pointer-events:none;
+ border-style:solid;border-width:0;border-image:var(--tvBalC) 8 fill/16px stretch;image-rendering:pixelated;image-rendering:crisp-edges;
+ filter:drop-shadow(0 3px 0 rgba(20,10,16,.35));
  opacity:0;transform:translateY(6px) scale(.9);transform-origin:10% 100%;transition:opacity .18s ease-out,transform .22s cubic-bezier(.3,1.5,.5,1)}}
-.tvbalao b{{display:block;margin-bottom:3px;font:400 18px/1 "Jacquard 12",Cinzel,serif;color:#6e1a16}}
-.tvbalao::after{{content:"";position:absolute;left:18px;bottom:-9px;width:14px;height:14px;background:#fff3d6;
- border-right:2px solid #2b1a0e;border-bottom:2px solid #2b1a0e;border-bottom-right-radius:3px;transform:rotate(45deg)}}
+.tvbalao b{{display:block;margin-bottom:3px;font:400 18px/1 "Jacquard 12",Cinzel,serif;color:#6e2727}}
+.tvbalao::after{{content:"";position:absolute;left:16px;bottom:-16px;width:22px;height:26px;
+ background:var(--tvBalR) 0 0/22px 26px no-repeat;image-rendering:pixelated;image-rendering:crisp-edges}}
 .tvbalao.on{{opacity:1;transform:none}}
 /* ===== fim Taverna navegação ===== */
 """
