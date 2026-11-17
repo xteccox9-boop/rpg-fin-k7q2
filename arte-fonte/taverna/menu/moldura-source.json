@@ -1,0 +1,70 @@
+{
+"version": 1,
+"name": "moldura",
+"canvas": [
+18,
+18
+],
+"palette": {
+"1": "#5a3410",
+"2": "#8a5a1e",
+"3": "#c08a3a",
+"4": "#e8bc5c",
+"5": "#fff0b0",
+"a": "#24150b",
+"b": "#2e1c10",
+"c": "#3a2414",
+"d": "#4a2e18",
+"o": "#140c08"
+},
+"frames": [
+{
+"name": "normal",
+"duration_ms": 100,
+"rows": [
+".oooooooooooooooo.",
+"oo233333333333o23o",
+"o2422222222222242o",
+"o32oooooooooooo2oo",
+"o32oddddddddddo21o",
+"o32obbbbbbbbabo21o",
+"o32occccccaccco21o",
+"o32occccaccccco21o",
+"o32occaccccccco21o",
+"o32oabbbbbbbbbo21o",
+"o32obbbbbbbbbao21o",
+"o32obbbbbbbabbo21o",
+"o32occcccacccco21o",
+"o32occcacccccco21o",
+"oo2oooooooooooo21o",
+"o2422222222222242o",
+"o32o111111111112oo",
+".oooooooooooooooo."
+]
+},
+{
+"name": "selecionada",
+"duration_ms": 100,
+"rows": [
+".oooooooooooooooo.",
+"oo455555555555o45o",
+"o4544444444444454o",
+"o54oooooooooooo4oo",
+"o54oddddddddddo43o",
+"o54obbbbbbbbabo43o",
+"o54occccccaccco43o",
+"o54occccaccccco43o",
+"o54occaccccccco43o",
+"o54oabbbbbbbbbo43o",
+"o54obbbbbbbbbao43o",
+"o54obbbbbbbabbo43o",
+"o54occcccacccco43o",
+"o54occcacccccco43o",
+"oo4oooooooooooo43o",
+"o4544444444444454o",
+"o54o333333333334oo",
+".oooooooooooooooo."
+]
+}
+]
+}

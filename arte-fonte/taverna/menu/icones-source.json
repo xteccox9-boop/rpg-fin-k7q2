@@ -1,0 +1,139 @@
+{
+"version": 1,
+"name": "icones",
+"canvas": [
+16,
+16
+],
+"palette": {
+"B": "#5a8ac8",
+"E": "#357a2a",
+"N": "#2e4a7a",
+"R": "#7a1818",
+"W": "#5a361a",
+"Y": "#e0a830",
+"e": "#6bbf4a",
+"g": "#a8741c",
+"h": "#fff6d8",
+"i": "#9a95a4",
+"o": "#140c08",
+"p": "#f0dcb0",
+"q": "#c8a878",
+"r": "#c43a2a",
+"v": "#b07840",
+"w": "#8a5a2c",
+"y": "#ffd27a"
+},
+"frames": [
+{
+"name": "categorias",
+"duration_ms": 100,
+"rows": [
+"................",
+"............ooo.",
+"............oyo.",
+"........ooo.oyo.",
+"........oeo.oyo.",
+"........oeo.oYo.",
+"....ooo.oeo.oYo.",
+"....oro.oEo.oYo.",
+"ooo.oro.oEo.oYo.",
+"oBo.oro.oEo.oYo.",
+"oBo.oRo.oEo.ogo.",
+"oNo.oRo.oEo.ogo.",
+"oooooooooooooooo",
+"oWwwwwwwwwwwwwWo",
+"oooooooooooooooo",
+"................"
+]
+},
+{
+"name": "dia",
+"duration_ms": 100,
+"rows": [
+"................",
+"...oio....oio...",
+"..ooooooooooooo.",
+"..orrrRrrrrRrro.",
+"..orrrrrrrrrrro.",
+"..ooooooooooooo.",
+"..opqpqpqpqpqpo.",
+"..opppppppppppo.",
+"..opqpqpqprrrpo.",
+"..opppppppryrpo.",
+"..opqpqpqprrrpo.",
+"..opppppppppppo.",
+"..opqpqpqpqpqpo.",
+"..oqqqqqqqqqqqo.",
+"..ooooooooooooo.",
+"................"
+]
+},
+{
+"name": "resumo",
+"duration_ms": 100,
+"rows": [
+".....ooooo......",
+"...ooBBYYYoo....",
+"..oBBBBYYYYYo...",
+".oeBBBBYYYYYYo..",
+".oeeBBByyYYYYo..",
+"oeeeeBByyyYYYYo.",
+"oeeeeeByyyyYYYo.",
+"oEEEeeehyyyYYYo.",
+"oEEEeerryyyYYYo.",
+"oEEERrrrryYYYYo.",
+".oRRRRrrrYYYYo..",
+".oRRRRRRRRYYYo..",
+"..oRRRRRRRYYo...",
+"...ooRRRRRoo....",
+".....ooooo......",
+"................"
+]
+},
+{
+"name": "metas",
+"duration_ms": 100,
+"rows": [
+"................",
+"................",
+".oooooooooooooo.",
+".ovvvvvYYvvvvvo.",
+".owwwwwYYwwwwwo.",
+".owwwwwYYwwwwwo.",
+".oYYYYYYYYYYYYo.",
+".ooooooyyoooooo.",
+".owwwwoyyowwwwo.",
+".owwwwoRRowwwwo.",
+".owwwwwoowwwwwo.",
+".oYwwwwwwwwwwYo.",
+".oYWWWWWWWWWWYo.",
+".oooooooooooooo.",
+"................",
+"................"
+]
+},
+{
+"name": "relatorios",
+"duration_ms": 100,
+"rows": [
+"................",
+"................",
+".oo..........oo.",
+".ovoooooooooovo.",
+".ovppppppppqqvo.",
+".ovpqqqqqqppqvo.",
+".ovpppppppppqvo.",
+".ovpqqqqqpppqvo.",
+".ovpppppprrpqvo.",
+".ovpqqqpprRpqvo.",
+".ovpppppppppqvo.",
+".ovqqqqqqqqqqvo.",
+".ovoooooooooovo.",
+".oo..........oo.",
+"................",
+"................"
+]
+}
+]
+}
