@@ -1,0 +1,7 @@
+# Cópias manuais datadas — o histórico do Git já guarda as versões
+backups/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
