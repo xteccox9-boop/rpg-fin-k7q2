@@ -1,0 +1,30 @@
+{
+  "format": "pixel-art-studio-atlas-v1",
+  "name": "taverna-cabecalho",
+  "image": "atlas.png",
+  "canvas": [
+    188,
+    64
+  ],
+  "size": [
+    188,
+    64
+  ],
+  "padding": 1,
+  "frames": [
+    {
+      "name": "taverna-cabecalho",
+      "rect": [
+        0,
+        0,
+        188,
+        64
+      ],
+      "duration_ms": 100,
+      "pivot": [
+        94,
+        64
+      ]
+    }
+  ]
+}
