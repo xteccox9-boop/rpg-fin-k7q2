@@ -934,6 +934,28 @@ html,body,main{height:var(--H)!important}
 .hp-ov-b::before{content:"› "}.hp-ov-b::after{content:" ‹"}
 @keyframes hpFade{from{opacity:0}}
 @keyframes hpDrop{from{opacity:0;transform:translateY(-40px) scale(1.3)}}
+/* ===== Barra de navegação: roda de moinho em pixel art (gire para escolher a aba) ===== */
+/* left:50% + translateX(-50%) mantém compatível com body.kb .dock (esconde ao abrir o teclado) */
+.dock{left:50%!important;right:auto!important;bottom:0!important;width:100%!important;max-width:560px!important;height:calc(100px + env(safe-area-inset-bottom,0px))!important;aspect-ratio:auto!important;margin:0!important;padding:0!important;transform:translateX(-50%);
+ display:block!important;overflow:hidden;border:0!important;border-radius:0!important;box-shadow:none!important;touch-action:none;-webkit-user-select:none;user-select:none;
+ background:linear-gradient(to top,rgba(12,7,4,.96) 0,rgba(12,7,4,.9) 45%,rgba(12,7,4,0) 100%)!important}
+/* prancha de madeira com friso dourado em pixel */
+.dock::before{content:"";position:absolute;z-index:0;left:0;right:0;bottom:0;height:calc(40px + env(safe-area-inset-bottom,0px));pointer-events:none;
+ background:linear-gradient(#f7da7a 0 2px,#c9a24b 2px 4px,#6b4a14 4px 6px,#1a0f06 6px 8px,transparent 8px),repeating-linear-gradient(90deg,transparent 0 46px,#1a0f06 46px 48px),var(--noise),linear-gradient(#4a2f18,#2a1a0c 60%,#170e07)}
+.dock::after{content:"";position:absolute;z-index:0;left:0;right:0;bottom:calc(32px + env(safe-area-inset-bottom,0px));height:4px;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 21px,#fff3c4 21px 23px,#8a6a3a 23px 25px,transparent 25px 48px)}
+/* os botões originais ficam só para leitores de tela e teclado; a roda faz o resto */
+.dock>button{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;border:0!important;opacity:0}
+.dock .dot{display:none!important}
+.wh{position:absolute;inset:0;z-index:1;pointer-events:none}
+.wh-cv{position:absolute;width:380px;height:380px;image-rendering:pixelated;image-rendering:crisp-edges}
+.wh-ring{position:absolute;left:50%;top:-2px;width:80px;height:80px;margin-left:-40px;z-index:2;image-rendering:pixelated;image-rendering:crisp-edges;filter:drop-shadow(0 0 8px rgba(255,200,80,.55))}
+.wh-ic{position:absolute;left:0;top:0;width:34px;height:34px;object-fit:contain;image-rendering:pixelated;z-index:1;transform-origin:50% 50%;filter:drop-shadow(0 2px 0 rgba(0,0,0,.7));will-change:transform}
+.wh-ic.sel{z-index:3;filter:drop-shadow(0 3px 0 #1a0f06) drop-shadow(0 7px 4px rgba(0,0,0,.65)) drop-shadow(0 0 6px rgba(255,210,110,.6))}
+.wh-lbl{position:absolute;left:50%;bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:3;transform:translateX(-50%);padding:1px 10px 3px;white-space:nowrap;font:400 22px/1 "Jacquard 12",Cinzel,serif;color:#ffd98a;
+ background:#1a0f06;box-shadow:inset 0 0 0 2px #c9a24b,inset 0 0 0 3px #3b2508,0 -2px 0 #1a0f06,0 2px 0 #1a0f06,-2px 0 0 #1a0f06,2px 0 0 #1a0f06;text-shadow:0 2px 0 #000;transition:opacity .15s}
+.wh-ar{position:absolute;bottom:calc(9px + env(safe-area-inset-bottom,0px));z-index:3;font:700 16px/1 "Pixelify Sans",sans-serif;color:#c9a24b;text-shadow:0 2px 0 #000;animation:whNudge 1.6s steps(2) infinite}
+.wh-ar.e{left:12px}.wh-ar.d{right:12px;animation-direction:reverse}
+@keyframes whNudge{50%{transform:translateX(-3px)}}
 </style>
 </head>
 <body data-v="novo">
@@ -2258,6 +2280,180 @@ renderSem();
   var base=render;
   render=function(){var r=base.apply(this,arguments);try{atualiza()}catch(e){}return r};
   try{atualiza()}catch(e){}
+})();
+</script>
+<script>
+/* ===== Páginas circulares (giram como a roda) =====
+   A ordem visual das páginas é feita só com CSS "order": o HTML não muda, então cada página
+   guarda a própria rolagem e entra(i)/children[i] continuam valendo. A aba atual fica sempre
+   no meio, com 2 vizinhas de cada lado na ordem da roda; quando a tela para, a ordem é refeita
+   no mesmo quadro (invisível). Assim Vilarejo e Cofre ficam lado a lado e o deslize é infinito. */
+(function(){
+  var pg=document.getElementById("pager");
+  if(!pg||typeof irPara!=="function"||typeof animPager!=="function")return;
+  var pages=[].slice.call(pg.children),N=pages.length;if(N<3)return;
+  var C=Math.floor(N/2),ordem=[],dedo=false,travado=false,tmr=0;
+  function W(){return pg.clientWidth||1}
+  function centra(tab){for(var p=0;p<N;p++){var t=((tab+p-C)%N+N)%N;ordem[p]=t;pages[t].style.order=p}}
+  function recentra(){
+    var w=W(),x=pg.scrollLeft/w,p=Math.round(x);
+    if(Math.abs(x-p)>.03||p===C)return;
+    travado=true;var snap=pg.style.scrollSnapType;pg.style.scrollSnapType="none";
+    centra(ordem[p]);pg.scrollLeft=C*w;pg.style.scrollSnapType=snap;
+    requestAnimationFrame(function(){travado=false});
+  }
+  function agenda(){if(travado)return;clearTimeout(tmr);tmr=setTimeout(function(){if(dedo||anim){agenda();return}recentra()},140)}
+  pg.addEventListener("touchstart",function(){dedo=true;anim=0},{passive:true});
+  pg.addEventListener("touchend",function(){dedo=false;agenda()},{passive:true});
+  pg.addEventListener("touchcancel",function(){dedo=false;agenda()},{passive:true});
+  /* posição da rolagem -> aba (antes: posição = aba) */
+  animPager=function(){
+    var x=pg.scrollLeft/W(),p=Math.max(0,Math.min(N-1,Math.round(x)));
+    setAtivo(ordem[p]);agenda();
+  };
+  /* aba -> rola pelo lado mais curto do círculo (no máximo 2 páginas) */
+  irPara=function(i){
+    var w=W(),from=pg.scrollLeft,pA=Math.max(0,Math.min(N-1,Math.round(from/w))),tA=ordem[pA];
+    var d=((i-tA)%N+N)%N;if(d>N/2)d-=N;
+    cancelAnimationFrame(anim);anim=0;
+    if(pA!==C){travado=true;centra(tA);pg.scrollLeft=C*w+(from-pA*w);from=pg.scrollLeft;requestAnimationFrame(function(){travado=false})}
+    var to=(C+d)*w,t0=null,dur=Math.min(650,320+Math.abs(to-from)/w*120);
+    if(RM||Math.abs(to-from)<1){pg.scrollLeft=to;agenda();return}
+    pg.style.scrollSnapType="none";
+    function step(t){
+      if(t0===null)t0=t;
+      var k=Math.min(1,(t-t0)/dur),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+      pg.scrollLeft=from+(to-from)*e;
+      if(k<1)anim=requestAnimationFrame(step);else{anim=0;pg.style.scrollSnapType="";recentra()}
+    }
+    anim=requestAnimationFrame(step);
+  };
+  window.addEventListener("resize",function(){var p=ordem.indexOf(ativo>=0?ativo:0);if(p>=0)pg.scrollLeft=p*W()});
+  var t0=typeof ativo==="number"&&ativo>=0?ativo:0;
+  centra(t0);pg.scrollLeft=C*W();
+})();
+</script>
+<script>
+/* ===== Roda de moinho da navegação =====
+   Os botões originais (.dock>button) continuam sendo a fonte da verdade: a roda só gira e
+   chama btn.click(); quando o app troca de aba por outro caminho, a roda acompanha. */
+(function(){
+  var dock=document.querySelector(".dock");if(!dock)return;
+  var btns=[].slice.call(dock.querySelectorAll("button[data-v]")),N=btns.length;if(N<3)return;
+  var SL=N*2,STEP=360/SL,R=170,RING_Y=46,LIFT=8,CY=RING_Y+R,CS=190,PX=2;
+  var reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var wrap=document.createElement("div");wrap.className="wh";wrap.setAttribute("aria-hidden","true");
+  var cv=document.createElement("canvas");cv.width=CS;cv.height=CS;cv.className="wh-cv";wrap.appendChild(cv);
+  var rg=document.createElement("canvas");rg.width=40;rg.height=40;rg.className="wh-ring";wrap.appendChild(rg);
+  var items=[];
+  for(var s=0;s<SL;s++){var im=document.createElement("img");im.src=btns[s%N].querySelector("img").src;im.className="wh-ic";im.alt="";im.draggable=false;wrap.appendChild(im);items.push(im)}
+  var lbl=document.createElement("b");lbl.className="wh-lbl";wrap.appendChild(lbl);
+  var ae=document.createElement("span");ae.className="wh-ar e";ae.textContent="◂";wrap.appendChild(ae);
+  var ad=document.createElement("span");ad.className="wh-ar d";ad.textContent="▸";wrap.appendChild(ad);
+  dock.appendChild(wrap);
+  var ctx=cv.getContext("2d"),RAD=Math.PI/180;
+
+  function limiar(c,w,h){var im=c.getImageData(0,0,w,h),d=im.data;for(var i=3;i<d.length;i+=4)d[i]=d[i]<110?0:255;c.putImageData(im,0,0)}
+  function disco(c,x,y,r,cor){c.fillStyle=cor;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+  /* círculo de seleção dourado (desenhado uma vez, em pixel) */
+  (function(){var c=rg.getContext("2d");disco(c,20,20,19,"#1a0f06");disco(c,20,20,17.5,"#f2b13c");disco(c,20,20,16,"#ffe08a");disco(c,20,20,14.5,"#a8741c");disco(c,20,20,13.5,"#1a0f06");
+    c.globalCompositeOperation="destination-out";disco(c,20,20,12.5,"#000");c.globalCompositeOperation="source-over";
+    [[20,1],[20,39],[1,20],[39,20]].forEach(function(p){c.fillStyle="#1a0f06";c.fillRect(p[0]-2,p[1]-2,4,4);c.fillStyle="#ff4a3d";c.fillRect(p[0]-1,p[1]-1,2,2)});
+    limiar(c,40,40)})();
+  /* a roda, redesenhada em baixa resolução a cada quadro para os pixels ficarem sempre alinhados */
+  function roda(a){
+    var c=ctx,h=CS/2,i,an;c.clearRect(0,0,CS,CS);c.save();c.translate(h,h);c.rotate(a);
+    disco(c,0,0,93,"#1a0f06");disco(c,0,0,91,"#3d2412");
+    for(i=0;i<SL;i++){var a0=(i*STEP-STEP/2-90)*RAD,a1=(i*STEP+STEP/2-90)*RAD;c.fillStyle=i%2?"#6b4423":"#7a4f28";c.beginPath();c.arc(0,0,89,a0,a1);c.arc(0,0,80,a1,a0,true);c.closePath();c.fill()}
+    c.strokeStyle="#a0703c";c.lineWidth=1;c.beginPath();c.arc(0,0,88,0,7);c.stroke();
+    c.strokeStyle="#1a0f06";c.lineWidth=1.3;
+    for(i=0;i<SL;i++){an=(i*STEP+STEP/2)*RAD;c.beginPath();c.moveTo(Math.sin(an)*79,-Math.cos(an)*79);c.lineTo(Math.sin(an)*91,-Math.cos(an)*91);c.stroke()}
+    c.globalCompositeOperation="destination-out";disco(c,0,0,79,"#000");c.globalCompositeOperation="source-over";
+    c.strokeStyle="#1a0f06";c.lineWidth=2;c.beginPath();c.arc(0,0,79.5,0,7);c.stroke();
+    c.strokeStyle="#6d6873";c.lineWidth=1;c.beginPath();c.arc(0,0,81,0,7);c.stroke();
+    for(i=0;i<SL;i++){c.save();c.rotate((i*STEP+STEP/2)*RAD);c.fillStyle="#1a0f06";c.fillRect(-3.5,-80,7,64);c.fillStyle="#5a3a1c";c.fillRect(-2.5,-79,5,62);c.fillStyle="#8a5a2b";c.fillRect(-2.5,-79,1.5,62);c.restore()}
+    disco(c,0,0,17,"#1a0f06");disco(c,0,0,15,"#4a4550");disco(c,0,0,11,"#8d8792");disco(c,0,0,5,"#2a2730");
+    for(i=0;i<6;i++){an=i*60*RAD;c.fillStyle="#d8d2de";c.fillRect(Math.sin(an)*13-1,-Math.cos(an)*13-1,2,2)}
+    for(i=0;i<SL;i++){c.save();c.rotate(i*STEP*RAD);disco(c,0,-85,11.5,"#1a0f06");disco(c,0,-85,10.5,"#2a1a10");c.strokeStyle="#8d8792";c.lineWidth=1;c.beginPath();c.arc(0,-85,9.5,0,7);c.stroke();c.restore()}
+    for(i=0;i<SL;i++){c.save();c.rotate((i*STEP+STEP/2)*RAD);c.fillStyle="#1a0f06";c.fillRect(-2,-87,4,4);c.fillStyle="#d8d2de";c.fillRect(-1,-86,2,2);c.restore()}
+    c.restore();limiar(c,CS,CS);
+  }
+  var ang=0,anim=0,porRoda=false,arrastando=false;
+  function norm(d){d=((d+180)%360+360)%360-180;return d}
+  function idxOn(){for(var i=0;i<N;i++)if(btns[i].classList.contains("on"))return i;return 0}
+  function desenha(){
+    var w=dock.clientWidth,cx=w/2;
+    cv.style.left=(cx-CS*PX/2)+"px";cv.style.top=(CY-CS*PX/2)+"px";
+    roda(ang*RAD);
+    var melhor=0,mp=0;
+    for(var s=0;s<SL;s++){
+      var d=norm(s*STEP+ang),th=d*RAD,x=cx+R*Math.sin(th),y=CY-R*Math.cos(th),perto=Math.max(0,1-Math.abs(d)/STEP);
+      var it=items[s];
+      if(Math.abs(d)>100){it.style.visibility="hidden";continue}
+      it.style.visibility="visible";
+      it.style.transform="translate("+(x-17).toFixed(1)+"px,"+(y-17-LIFT*perto).toFixed(1)+"px) scale("+(1+.42*perto).toFixed(3)+")";
+      it.classList.toggle("sel",perto>.6);
+      if(perto>mp){mp=perto;melhor=s}
+    }
+    lbl.textContent=btns[melhor%N].getAttribute("aria-label");lbl.style.opacity=(.25+.75*mp).toFixed(2);
+  }
+  function giraPara(alvo,fim){
+    cancelAnimationFrame(anim);
+    if(reduz){ang=alvo;desenha();fim&&fim();return}
+    var de=ang,dif=alvo-de,dur=Math.min(650,220+Math.abs(dif)*3),t0=performance.now();
+    (function passo(t){var p=Math.min(1,(t-t0)/dur),c1=1.4,e=1+(c1+1)*Math.pow(p-1,3)+c1*Math.pow(p-1,2);
+      ang=de+dif*e;desenha();if(p<1)anim=requestAnimationFrame(passo);else{ang=alvo;desenha();fim&&fim()}})(t0);
+  }
+  function abaDe(a){return(((Math.round(-a/STEP)%SL)+SL)%SL)%N}
+  var travaAte=0,tmr=0;
+  function seleciona(alvo){
+    var i=abaDe(alvo);
+    /* o app desliza as páginas e marca cada aba do caminho como ativa; a roda ignora essas abas de passagem */
+    travaAte=performance.now()+1100;
+    if(!btns[i].classList.contains("on")){porRoda=true;btns[i].click();porRoda=false}
+  }
+  /* arrastar para girar, com impulso e encaixe; toque leve num ícone gira até ele */
+  var x0=0,y0=0,a0=0,ux=0,ut=0,vel=0,mov=0;
+  dock.addEventListener("pointerdown",function(e){
+    if(e.button>0)return;arrastando=true;cancelAnimationFrame(anim);
+    x0=ux=e.clientX;y0=e.clientY;a0=ang;ut=performance.now();vel=0;mov=0;
+    try{dock.setPointerCapture(e.pointerId)}catch(_){}
+  });
+  dock.addEventListener("pointermove",function(e){
+    if(!arrastando)return;var t=performance.now(),dx=e.clientX-x0;mov=Math.max(mov,Math.abs(dx));
+    ang=a0+dx/R/RAD;var dt=t-ut;if(dt>0)vel=.8*((e.clientX-ux)/R/RAD/dt)+.2*vel;ux=e.clientX;ut=t;desenha();
+  });
+  function solta(e){
+    if(!arrastando)return;arrastando=false;var alvo;
+    if(mov<8){
+      var r=dock.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,best=-1,bd=1e9,cx=dock.clientWidth/2;
+      for(var s=0;s<SL;s++){var d=norm(s*STEP+ang);if(Math.abs(d)>60)continue;var th=d*RAD,x=cx+R*Math.sin(th),y=CY-R*Math.cos(th),dd=Math.hypot(px-x,py-y);if(dd<bd){bd=dd;best=s}}
+      if(best<0||bd>48){alvo=Math.round(ang/STEP)*STEP}else{alvo=ang-norm(best*STEP+ang)}
+    }else{
+      /* encaixe previsível: o embalo vale no máximo meio ícone, e um gesto curto anda exatamente 1 */
+      if(performance.now()-ut>90)vel=0;
+      var s0=Math.round(a0/STEP),cur=ang/STEP,emb=Math.max(-.35,Math.min(.35,vel*170/STEP)),n=Math.round(cur+emb);
+      if(n===s0&&Math.abs(cur-s0)>.12)n=s0+(cur<s0?-1:1);
+      alvo=n*STEP;
+    }
+    giraPara(alvo,function(){seleciona(alvo)});
+  }
+  dock.addEventListener("pointerup",solta);dock.addEventListener("pointercancel",solta);
+  /* troca de aba por outro caminho (deslizar a tela, teclado): a roda acompanha pelo menor giro */
+  /* só acompanha quando a aba parou de mudar (fim do deslize) e é diferente da que a roda mostra */
+  function sincroniza(){
+    if(arrastando||performance.now()<travaAte){tmr=setTimeout(sincroniza,200);return}
+    var i=idxOn();if(abaDe(ang)===i)return;
+    var best=null;
+    for(var k=0;k<2;k++){var base=-(i+k*N)*STEP,alvo=ang+norm(base-ang);if(best===null||Math.abs(alvo-ang)<Math.abs(best-ang))best=alvo}
+    giraPara(best);
+  }
+  var mo=new MutationObserver(function(){
+    if(porRoda)return;clearTimeout(tmr);tmr=setTimeout(sincroniza,240);
+  });
+  btns.forEach(function(b){mo.observe(b,{attributes:true,attributeFilter:["class"]})});
+  window.addEventListener("resize",desenha);
+  ang=-idxOn()*STEP;desenha();
 })();
 </script>
 </body>
