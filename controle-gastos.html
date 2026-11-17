@@ -2340,7 +2340,7 @@ renderSem();
 (function(){
   var dock=document.querySelector(".dock");if(!dock)return;
   var btns=[].slice.call(dock.querySelectorAll("button[data-v]")),N=btns.length;if(N<3)return;
-  var SL=N*2,STEP=360/SL,R=170,RING_Y=46,LIFT=8,CY=RING_Y+R,CS=190,PX=2;
+  var SL=N*2,STEP=360/SL,R=170,RING_Y=46,LIFT=8,CY=RING_Y+R,CS=190,PX=2,GANHO=1.6;
   var reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   var wrap=document.createElement("div");wrap.className="wh";wrap.setAttribute("aria-hidden","true");
   var cv=document.createElement("canvas");cv.width=CS;cv.height=CS;cv.className="wh-cv";wrap.appendChild(cv);
@@ -2397,31 +2397,32 @@ renderSem();
     }
     lbl.textContent=btns[melhor%N].getAttribute("aria-label");lbl.style.opacity=(.25+.75*mp).toFixed(2);
   }
+  var pend=false;/* true enquanto a roda gira até uma escolha do usuário: nada pode interromper */
   function giraPara(alvo,fim){
-    cancelAnimationFrame(anim);
-    if(reduz){ang=alvo;desenha();fim&&fim();return}
+    cancelAnimationFrame(anim);pend=!!fim;
+    if(reduz){ang=alvo;desenha();pend=false;fim&&fim();return}
     var de=ang,dif=alvo-de,dur=Math.min(650,220+Math.abs(dif)*3),t0=performance.now();
     (function passo(t){var p=Math.min(1,(t-t0)/dur),c1=1.4,e=1+(c1+1)*Math.pow(p-1,3)+c1*Math.pow(p-1,2);
-      ang=de+dif*e;desenha();if(p<1)anim=requestAnimationFrame(passo);else{ang=alvo;desenha();fim&&fim()}})(t0);
+      ang=de+dif*e;desenha();if(p<1)anim=requestAnimationFrame(passo);else{ang=alvo;desenha();pend=false;fim&&fim()}})(t0);
   }
   function abaDe(a){return(((Math.round(-a/STEP)%SL)+SL)%SL)%N}
   var travaAte=0,tmr=0;
   function seleciona(alvo){
     var i=abaDe(alvo);
     /* o app desliza as páginas e marca cada aba do caminho como ativa; a roda ignora essas abas de passagem */
-    travaAte=performance.now()+1100;
+    travaAte=performance.now()+1100;clearTimeout(tmr);
     if(!btns[i].classList.contains("on")){porRoda=true;btns[i].click();porRoda=false}
   }
   /* arrastar para girar, com impulso e encaixe; toque leve num ícone gira até ele */
   var x0=0,y0=0,a0=0,ux=0,ut=0,vel=0,mov=0;
   dock.addEventListener("pointerdown",function(e){
-    if(e.button>0)return;arrastando=true;cancelAnimationFrame(anim);
+    if(e.button>0)return;arrastando=true;cancelAnimationFrame(anim);pend=false;clearTimeout(tmr);
     x0=ux=e.clientX;y0=e.clientY;a0=ang;ut=performance.now();vel=0;mov=0;
     try{dock.setPointerCapture(e.pointerId)}catch(_){}
   });
   dock.addEventListener("pointermove",function(e){
     if(!arrastando)return;var t=performance.now(),dx=e.clientX-x0;mov=Math.max(mov,Math.abs(dx));
-    ang=a0+dx/R/RAD;var dt=t-ut;if(dt>0)vel=.8*((e.clientX-ux)/R/RAD/dt)+.2*vel;ux=e.clientX;ut=t;desenha();
+    ang=a0+dx/(R*GANHO)/RAD;var dt=t-ut;if(dt>0)vel=.8*((e.clientX-ux)/R/RAD/dt)+.2*vel;ux=e.clientX;ut=t;desenha();
   });
   function solta(e){
     if(!arrastando)return;arrastando=false;var alvo;
@@ -2430,10 +2431,9 @@ renderSem();
       for(var s=0;s<SL;s++){var d=norm(s*STEP+ang);if(Math.abs(d)>60)continue;var th=d*RAD,x=cx+R*Math.sin(th),y=CY-R*Math.cos(th),dd=Math.hypot(px-x,py-y);if(dd<bd){bd=dd;best=s}}
       if(best<0||bd>48){alvo=Math.round(ang/STEP)*STEP}else{alvo=ang-norm(best*STEP+ang)}
     }else{
-      /* encaixe previsível: o embalo vale no máximo meio ícone, e um gesto curto anda exatamente 1 */
-      if(performance.now()-ut>90)vel=0;
-      var s0=Math.round(a0/STEP),cur=ang/STEP,emb=Math.max(-.35,Math.min(.35,vel*170/STEP)),n=Math.round(cur+emb);
-      if(n===s0&&Math.abs(cur-s0)>.12)n=s0+(cur<s0?-1:1);
+      /* encaixe previsível, sem embalo: qualquer gesto anda 1 ícone; só uma varrida quase da largura da tela anda 2 */
+      var s0=Math.round(a0/STEP),dist=ang/STEP-s0,n=s0;
+      if(Math.abs(dist)>.15)n=s0+(dist<0?-1:1)*Math.max(1,Math.round(Math.abs(dist)-.3));
       alvo=n*STEP;
     }
     giraPara(alvo,function(){seleciona(alvo)});
@@ -2442,7 +2442,7 @@ renderSem();
   /* troca de aba por outro caminho (deslizar a tela, teclado): a roda acompanha pelo menor giro */
   /* só acompanha quando a aba parou de mudar (fim do deslize) e é diferente da que a roda mostra */
   function sincroniza(){
-    if(arrastando||performance.now()<travaAte){tmr=setTimeout(sincroniza,200);return}
+    if(arrastando||pend||performance.now()<travaAte){tmr=setTimeout(sincroniza,200);return}
     var i=idxOn();if(abaDe(ang)===i)return;
     var best=null;
     for(var k=0;k<2;k++){var base=-(i+k*N)*STEP,alvo=ang+norm(base-ang);if(best===null||Math.abs(alvo-ang)<Math.abs(best-ang))best=alvo}
