@@ -766,6 +766,35 @@ html,body,main{height:var(--H)!important}
 .dock button.on{transform:none;color:#fff;background:rgba(240,180,60,.12);box-shadow:inset 0 0 0 3px #f2b13c,0 0 14px rgba(242,177,60,.55)}
 .dock button.on img{transform:scale(1.12) translateY(-2px)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* ===== Polimento mobile (nov/2026): legibilidade e áreas de toque. Só visual, nenhuma lógica. ===== */
+/* Cabeçalho do herói: piso de legibilidade (antes chegava a 7,9px em 375px) */
+.lvb{font-size:max(10px,2.1vw)!important}
+.hcls{font-size:max(11px,2.4vw)!important}
+.xptr .xpt{font-size:max(10px,2.1vw)!important}
+#mes{font-size:12px!important}
+/* Taverna e Torre: textos de 10-11px sobem para 11-13px sem quebrar as duas colunas */
+.tvk{font-size:12px}
+#tvSub,#trSub{font-size:12px}
+.tvleg button{min-height:28px;font-size:12px}
+.tvleg button b{font-size:12px}
+.tvleg button em{width:27px;font-size:11px}
+.tvlink{position:relative;font-size:13px}
+/* Dungeon: ícones de categoria de 32px para ~40px */
+.npanel .ci{width:clamp(38px,10.6vw,46px)!important;height:clamp(38px,10.6vw,46px)!important;flex:0 0 clamp(38px,10.6vw,46px)!important}
+.npanel .ci .ciimg{width:74%!important;height:74%!important}
+/* Guilda: botões 70/80/90% com altura de toque */
+#cfLim{gap:4px}
+#cfLim button{position:relative;min-height:30px;padding:4px 8px;font-size:12px}
+/* Área de toque invisível de +6px em botões pequenos (o visual não muda) */
+.tvnav button{position:relative}
+.plus::after,.micbtn::after,.tvnav button::after,.tvlink::after,#cfLim button::after{content:"";position:absolute;inset:-6px}
+/* Textos de ajuda e datas das listas */
+.tvsm{font-size:11.5px}
+.tvult small{font-size:11px}
+/* Cofre: seletor 3M/6M/12M/Tudo */
+.cfper{gap:4px}
+.cfper button{position:relative;min-height:30px;padding:4px 8px;font-size:12px}
+.cfper button::after{content:"";position:absolute;inset:-4px}
 </style>
 </head>
 <body data-v="novo">
