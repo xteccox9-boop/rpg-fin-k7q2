@@ -6,7 +6,7 @@
 <title>Controle de gastos</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Alegreya+Sans:wght@400;500;700&family=Jacquard+12&family=Pixelify+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#2b1b10;--mute:#6b4f33;--card:#f6ecd0;--line:#8a6a3a;--acc:#7a1f2e;--ok:#1f7a3a;--bad:#b3201f;--panel:#2a1a0f;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .2 0 0 0 0 .12 0 0 0 0 .05 0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 *{box-sizing:border-box}
@@ -795,6 +795,145 @@ html,body,main{height:var(--H)!important}
 .cfper{gap:4px}
 .cfper button{position:relative;min-height:30px;padding:4px 8px;font-size:12px}
 .cfper button::after{content:"";position:absolute;inset:-4px}
+/* ===== Dungeon: visual de masmorra em pixel art (pedra, ferro, brasa). Ícones e fundo intactos. ===== */
+.npanel{--dg-out:#0b090d;--dg-st1:#4a4350;--dg-st2:#2a2530;--dg-st3:#18141c;--dg-iron:#8d8792;--dg-ember:#ff8a3c;--dg-txt:#f3e2c0}
+/* rebites (pixels quadrados) nos 4 cantos */
+.npanel .ci,.npanel #desc,.npanel .dil,.npanel .primary{--rv:linear-gradient(var(--dg-iron),var(--dg-iron))}
+/* blocos de pedra das categorias; a escolhida acende como brasa */
+.npanel .ci{border:0!important;border-radius:0!important;transition:transform .18s steps(3),background .2s;
+ background:var(--rv) 3px 3px/3px 3px no-repeat,var(--rv) calc(100% - 3px) 3px/3px 3px no-repeat,var(--rv) 3px calc(100% - 3px)/3px 3px no-repeat,var(--rv) calc(100% - 3px) calc(100% - 3px)/3px 3px no-repeat,linear-gradient(var(--dg-st1),var(--dg-st2) 55%,var(--dg-st3))!important;
+ box-shadow:inset 0 3px 0 rgba(255,255,255,.13),inset 0 -3px 0 rgba(0,0,0,.5),0 -3px 0 var(--dg-out),0 3px 0 var(--dg-out),-3px 0 0 var(--dg-out),3px 0 0 var(--dg-out),0 6px 0 rgba(0,0,0,.45)!important}
+.npanel .ci.on{transform:translateY(-3px)!important;
+ background:var(--rv) 3px 3px/3px 3px no-repeat,var(--rv) calc(100% - 3px) 3px/3px 3px no-repeat,var(--rv) 3px calc(100% - 3px)/3px 3px no-repeat,var(--rv) calc(100% - 3px) calc(100% - 3px)/3px 3px no-repeat,radial-gradient(circle at 50% 62%,#ffb15a 0,#e0622a 34%,#7a2414 68%,#2a0e0a 100%)!important;
+ box-shadow:inset 0 3px 0 rgba(255,230,180,.35),inset 0 -3px 0 rgba(60,8,0,.55),0 -3px 0 #ffcf6b,0 3px 0 #ffcf6b,-3px 0 0 #ffcf6b,3px 0 0 #ffcf6b,0 0 0 6px rgba(255,120,40,.18),0 0 18px 6px rgba(255,110,30,.55),0 9px 0 rgba(0,0,0,.45)!important;
+ animation:dgTocha 1.1s ease-in-out infinite alternate}
+@keyframes dgTocha{to{filter:brightness(1.12) saturate(1.1)}}
+.npanel .ci .ciimg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.6))}
+.npanel #catNome{font-family:Cinzel,serif;font-weight:800!important;letter-spacing:.06em;color:#ffcf6b!important;text-shadow:0 2px 0 #2a0e0a,0 0 10px rgba(255,120,40,.6)!important;margin-top:4px!important}
+/* laje de pedra com tijolos (descrição e diluir) */
+.npanel #desc,.npanel .dil{border:0!important;border-image:none!important;border-radius:0!important;color:var(--dg-txt)!important;
+ background:var(--rv) 5px 5px/3px 3px no-repeat,var(--rv) calc(100% - 5px) 5px/3px 3px no-repeat,var(--rv) 5px calc(100% - 5px)/3px 3px no-repeat,var(--rv) calc(100% - 5px) calc(100% - 5px)/3px 3px no-repeat,linear-gradient(rgba(10,8,12,.35),rgba(10,8,12,.35)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' fill-opacity='.42' d='M0 0h40v2H0zM0 10h40v2H0zM0 0h2v10H0zM20 10h2v10h-2z'/%3E%3Cpath fill='%23fff' fill-opacity='.05' d='M2 2h18v1H2zM22 2h18v1H22zM0 12h20v1H0zM22 12h18v1H22z'/%3E%3C/svg%3E") 0 0/40px 20px,linear-gradient(#3a3440,#26212b)!important;
+ box-shadow:inset 0 0 0 2px #5b5462,inset 0 3px 0 2px rgba(255,255,255,.06),inset 0 6px 12px rgba(0,0,0,.55),0 -3px 0 var(--dg-out),0 3px 0 var(--dg-out),-3px 0 0 var(--dg-out),3px 0 0 var(--dg-out),0 6px 0 rgba(0,0,0,.4)!important}
+.npanel #desc{padding:11px 16px!important;margin:0 3px}
+.npanel #desc::placeholder{color:rgba(243,226,192,.5)!important}
+.npanel #desc:focus,.npanel #desc:focus-visible{outline:none!important;box-shadow:inset 0 0 0 2px var(--dg-ember),inset 0 6px 12px rgba(0,0,0,.55),0 -3px 0 var(--dg-out),0 3px 0 var(--dg-out),-3px 0 0 var(--dg-out),3px 0 0 var(--dg-out),0 0 14px rgba(255,120,40,.45)!important}
+.npanel .dil{padding:6px 14px!important;margin:0 3px}
+.npanel .dil .sw{color:var(--dg-txt)}
+.npanel .sw>i{border-radius:0!important;border:0!important;background:#141017!important;box-shadow:inset 0 2px 0 rgba(0,0,0,.6),0 -2px 0 var(--dg-out),0 2px 0 var(--dg-out),-2px 0 0 var(--dg-out),2px 0 0 var(--dg-out),inset 0 0 0 2px #4d4654}
+.npanel .sw>i::after{border-radius:0!important;top:3px!important;left:3px!important;background:linear-gradient(#b5afba,#6b6570)!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(0,0,0,.4)}
+.npanel .sw>input:checked+i{background:linear-gradient(#ff9a3c,#b8461a)!important;box-shadow:inset 0 2px 0 rgba(255,220,160,.4),0 -2px 0 var(--dg-out),0 2px 0 var(--dg-out),-2px 0 0 var(--dg-out),2px 0 0 var(--dg-out),0 0 10px rgba(255,120,40,.6)}
+.npanel #dilN{border-radius:0!important;border:0!important;background:#141017!important;color:var(--dg-txt)!important;box-shadow:inset 0 0 0 2px #5b5462,inset 0 3px 6px rgba(0,0,0,.6)!important}
+/* placa de ferro vermelho-sangue (Adicionar gasto) */
+.npanel .primary{height:auto!important;min-height:46px!important;padding:10px 16px!important;margin:4px 3px 0!important;font-family:Cinzel,serif!important;font-weight:800!important;font-size:17px!important;letter-spacing:.08em;text-transform:uppercase;color:#ffe3a3!important;text-shadow:0 2px 0 #2a0608,0 0 10px rgba(255,140,60,.45);
+ background:var(--rv) 6px 6px/3px 3px no-repeat,var(--rv) calc(100% - 6px) 6px/3px 3px no-repeat,var(--rv) 6px calc(100% - 6px)/3px 3px no-repeat,var(--rv) calc(100% - 6px) calc(100% - 6px)/3px 3px no-repeat,linear-gradient(90deg,#3a3440 0 10px,transparent 10px calc(100% - 10px),#3a3440 calc(100% - 10px)),linear-gradient(#b02a30,#7a1519 55%,#4e0b0f)!important;
+ box-shadow:inset 0 3px 0 rgba(255,190,150,.35),inset 0 -4px 0 rgba(0,0,0,.5),inset 12px 0 0 -2px rgba(0,0,0,.25),inset -12px 0 0 -2px rgba(0,0,0,.25),0 -3px 0 var(--dg-out),0 3px 0 var(--dg-out),-3px 0 0 var(--dg-out),3px 0 0 var(--dg-out),0 8px 0 rgba(0,0,0,.45)!important}
+.npanel .primary::before{display:none!important}
+/* ===== Dungeon: pedra lascada (cantos quebrados em degrau de pixel, rachaduras e grãos) ===== */
+.npanel{--ck1:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' fill-opacity='.85' d='M0 0h3v2H0zM2 2h2v3H2zM4 4h2v3H4zM5 7h3v2H5zM8 8h2v3H8zM9 11h2v2H9zM6 5h1v1H6zM3 5h1v2H3z'/%3E%3Cpath fill='%23fff' fill-opacity='.18' d='M3 0h1v2H3zM4 2h1v2H4zM6 4h1v1H6zM8 7h1v1H8zM10 8h1v3h-1zM11 11h1v2h-1z'/%3E%3C/svg%3E");
+ --ck2:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' fill-opacity='.85' d='M16 0h-3v2h-2v3H9v2H7v3H5v2H3v2h2v-2h2v-2h2V8h2V6h2V3h3zM10 9h2v2h-2z'/%3E%3Cpath fill='%23fff' fill-opacity='.18' d='M16 2h-1v2h-2v2h-1v2h-2v2H8v1h2V9h2V7h2V4h2z'/%3E%3C/svg%3E");
+ --speck:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' shape-rendering='crispEdges'%3E%3Cpath fill='%23fff' fill-opacity='.07' d='M2 3h1v1H2zM8 1h1v1H8zM6 8h1v1H6zM10 10h1v1h-1z'/%3E%3Cpath fill='%23000' fill-opacity='.25' d='M4 6h1v1H4zM9 5h1v1H9zM1 10h1v1H1zM7 3h1v1H7z'/%3E%3C/svg%3E")}
+/* contorno em pixel que acompanha as lascas (fica no pai: clip-path corta sombras externas) */
+.npanel .cgrid{filter:drop-shadow(2px 0 0 #0b090d) drop-shadow(-2px 0 0 #0b090d) drop-shadow(0 2px 0 #0b090d) drop-shadow(0 -2px 0 #0b090d) drop-shadow(0 5px 0 rgba(0,0,0,.45))!important}
+.npanel .ci{--ck:var(--ck1);--ckp:2px 2px;
+ clip-path:polygon(0 12px,3px 12px,3px 9px,6px 9px,6px 6px,9px 6px,9px 3px,12px 3px,12px 0,calc(100% - 15px) 0,calc(100% - 15px) 3px,calc(100% - 9px) 3px,calc(100% - 9px) 0,calc(100% - 3px) 0,calc(100% - 3px) 3px,100% 3px,100% calc(100% - 12px),calc(100% - 3px) calc(100% - 12px),calc(100% - 3px) calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) calc(100% - 3px),calc(100% - 9px) calc(100% - 3px),calc(100% - 9px) 100%,6px 100%,6px calc(100% - 3px),3px calc(100% - 3px),3px calc(100% - 6px),0 calc(100% - 6px));
+ background:var(--ck) var(--ckp)/18px 18px no-repeat,var(--speck) 0 0/12px 12px,linear-gradient(#4f4855,#2c2732 55%,#1a161e)!important;
+ box-shadow:inset 0 3px 0 rgba(255,255,255,.14),inset 0 -3px 0 rgba(0,0,0,.5),inset 3px 0 0 rgba(255,255,255,.05),inset -3px 0 0 rgba(0,0,0,.3)!important}
+.npanel .ci:nth-child(2n){--ck:var(--ck2);--ckp:calc(100% - 2px) 2px;
+ clip-path:polygon(0 3px,3px 3px,3px 0,calc(100% - 12px) 0,calc(100% - 12px) 3px,calc(100% - 9px) 3px,calc(100% - 9px) 6px,calc(100% - 6px) 6px,calc(100% - 6px) 9px,calc(100% - 3px) 9px,calc(100% - 3px) 12px,100% 12px,100% 45%,calc(100% - 3px) 45%,calc(100% - 3px) 62%,100% 62%,100% calc(100% - 3px),calc(100% - 3px) calc(100% - 3px),calc(100% - 3px) 100%,12px 100%,12px calc(100% - 3px),6px calc(100% - 3px),6px calc(100% - 6px),3px calc(100% - 6px),3px calc(100% - 9px),0 calc(100% - 9px))}
+.npanel .ci:nth-child(3n){--ck:var(--ck1);--ckp:calc(100% - 3px) calc(100% - 3px);
+ clip-path:polygon(0 6px,3px 6px,3px 3px,6px 3px,6px 0,calc(100% - 3px) 0,calc(100% - 3px) 3px,100% 3px,100% calc(100% - 15px),calc(100% - 3px) calc(100% - 15px),calc(100% - 3px) calc(100% - 9px),calc(100% - 6px) calc(100% - 9px),calc(100% - 6px) calc(100% - 6px),calc(100% - 9px) calc(100% - 6px),calc(100% - 9px) calc(100% - 3px),calc(100% - 15px) calc(100% - 3px),calc(100% - 15px) 100%,3px 100%,3px calc(100% - 3px),0 calc(100% - 3px),0 62%,3px 62%,3px 40%,0 40%)}
+.npanel .ci.on{background:var(--ck) var(--ckp)/18px 18px no-repeat,var(--speck) 0 0/12px 12px,radial-gradient(circle at 50% 62%,#ffb15a 0,#e0622a 34%,#7a2414 68%,#2a0e0a 100%)!important;
+ box-shadow:inset 0 0 0 2px #ffcf6b,inset 0 4px 0 2px rgba(255,230,180,.3),inset 0 -4px 0 2px rgba(60,8,0,.5)!important;animation:dgTocha .9s steps(2) infinite alternate}
+.npanel .ci.on .ciimg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.6)) drop-shadow(0 0 5px rgba(255,190,90,.8))}
+/* lajes lascadas (descrição e diluir) */
+.npanel #desc,.npanel .dil{
+ clip-path:polygon(0 16px,4px 16px,4px 12px,8px 12px,8px 8px,12px 8px,12px 4px,16px 4px,16px 0,calc(100% - 8px) 0,calc(100% - 8px) 4px,calc(100% - 4px) 4px,calc(100% - 4px) 8px,100% 8px,100% calc(100% - 16px),calc(100% - 4px) calc(100% - 16px),calc(100% - 4px) calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) calc(100% - 4px),calc(100% - 16px) calc(100% - 4px),calc(100% - 16px) 100%,40% 100%,40% calc(100% - 4px),30% calc(100% - 4px),30% 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px));
+ background:var(--ck1) calc(100% - 10px) 5px/16px 16px no-repeat,var(--ck2) 10px calc(100% - 4px)/16px 16px no-repeat,var(--speck) 0 0/12px 12px,linear-gradient(rgba(10,8,12,.3),rgba(10,8,12,.3)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' fill-opacity='.42' d='M0 0h40v2H0zM0 10h40v2H0zM0 0h2v10H0zM20 10h2v10h-2z'/%3E%3Cpath fill='%23fff' fill-opacity='.05' d='M2 2h18v1H2zM22 2h18v1H22zM0 12h20v1H0zM22 12h18v1H22z'/%3E%3C/svg%3E") 0 0/40px 20px,linear-gradient(#3a3440,#26212b)!important;
+ box-shadow:inset 0 0 0 3px #0b090d,inset 0 0 0 5px #4d4654,inset 0 8px 12px rgba(0,0,0,.5)!important}
+.npanel .dil{clip-path:polygon(0 4px,4px 4px,4px 0,60% 0,60% 4px,68% 4px,68% 0,calc(100% - 16px) 0,calc(100% - 16px) 4px,calc(100% - 12px) 4px,calc(100% - 12px) 8px,calc(100% - 8px) 8px,calc(100% - 8px) 12px,calc(100% - 4px) 12px,calc(100% - 4px) 16px,100% 16px,100% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,16px 100%,16px calc(100% - 4px),12px calc(100% - 4px),12px calc(100% - 8px),4px calc(100% - 8px),4px calc(100% - 12px),0 calc(100% - 12px))}
+.npanel #desc{padding:12px 18px!important}
+.npanel #desc:focus,.npanel #desc:focus-visible{box-shadow:inset 0 0 0 3px #0b090d,inset 0 0 0 5px var(--dg-ember),inset 0 8px 12px rgba(0,0,0,.5)!important}
+/* "durar 7 dias" na mesma linha do Diluir (interruptor na ponta; a dica desce quando aparece) */
+.npanel .dil{position:relative;display:flex;flex-wrap:wrap;align-items:center;column-gap:10px;row-gap:2px;padding:9px 16px!important}
+.npanel .dil .sw,.npanel #dilBox{display:contents}
+.npanel .dil .sw>span{order:1;flex:1 1 auto;min-width:0}
+.npanel #dilBox>label{order:2;flex:none}
+.npanel .dil .sw>i{order:3}
+.npanel #dilT{order:4;flex:0 0 100%}
+.npanel #dilT:empty{display:none}
+.npanel .primary:active{transform:translateY(3px)!important;box-shadow:inset 0 3px 0 rgba(255,190,150,.25),inset 0 -2px 0 rgba(0,0,0,.5),0 -3px 0 var(--dg-out),0 3px 0 var(--dg-out),-3px 0 0 var(--dg-out),3px 0 0 var(--dg-out),0 4px 0 rgba(0,0,0,.45)!important}
+/* ===== Dungeon: fontes de masmorra, texto cinza, pedra de verdade e botão só em texto vermelho ===== */
+.npanel{--stone:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='s' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='5' seed='11' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23a7a2ad' surfaceScale='4'%3E%3CfeDistantLight azimuth='235' elevation='38'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");--dg-gray:#b9b5be}
+/* fontes: Pixelify Sans (pixel legível) e Jacquard 12 (gótica em pixel); Cinzel como reserva offline */
+.npanel .amt span,.npanel .amt input{font-family:"Pixelify Sans",Cinzel,serif!important;font-weight:700!important}
+.npanel .amt input{letter-spacing:0!important}
+.npanel #catNome{font-family:"Jacquard 12",Cinzel,serif!important;font-weight:400!important;font-size:26px!important;letter-spacing:.02em!important;text-transform:none!important;font-variant:normal!important;line-height:1!important;margin-top:6px!important}
+.npanel #desc,.npanel .dil,.npanel #dilN,.npanel #dilT{font-family:"Pixelify Sans",sans-serif!important}
+/* texto cinza dentro dos quadros */
+.npanel #desc,.npanel .dil,.npanel .dil .sw,.npanel #dilBox,.npanel #dilN{color:var(--dg-gray)!important;text-shadow:0 1px 0 #000!important}
+.npanel #desc{font-size:15px!important}
+.npanel #desc::placeholder{color:rgba(185,181,190,.55)!important}
+.npanel .dil .sw>span{font-size:13px;line-height:1.15}
+.npanel #dilBox>label{font-size:13px;gap:4px!important}
+.npanel #dilT{color:#8f8a95!important;font-size:12px!important}
+.npanel .dil{column-gap:8px!important}
+.npanel #dilN{width:38px!important;padding:4px!important}
+/* pedra de verdade (rocha com relevo) no lugar dos tijolos; cada bloco mostra um pedaço diferente */
+.npanel .ci{background:var(--ck) var(--ckp)/18px 18px no-repeat,linear-gradient(rgba(24,21,28,.5),rgba(10,9,12,.72)),var(--stone) var(--sp,0 0)/160px 160px!important}
+.npanel .ci:nth-child(2){--sp:-40px -30px}.npanel .ci:nth-child(3){--sp:-90px -10px}.npanel .ci:nth-child(4){--sp:-20px -80px}.npanel .ci:nth-child(5){--sp:-110px -60px}.npanel .ci:nth-child(6){--sp:-60px -110px}.npanel .ci:nth-child(7){--sp:-130px -120px}
+.npanel .ci.on{background:var(--ck) var(--ckp)/18px 18px no-repeat,radial-gradient(circle at 50% 62%,rgba(255,177,90,.95) 0,rgba(224,98,42,.85) 34%,rgba(122,36,20,.78) 68%,rgba(42,14,10,.88) 100%),var(--stone) var(--sp,0 0)/160px 160px!important}
+.npanel #desc,.npanel .dil{background:var(--ck1) calc(100% - 10px) 5px/16px 16px no-repeat,var(--ck2) 10px calc(100% - 4px)/16px 16px no-repeat,linear-gradient(rgba(22,19,26,.55),rgba(10,9,12,.75)),var(--stone) 0 0/160px 160px!important}
+.npanel .dil{background-position:calc(100% - 10px) 5px,10px calc(100% - 4px),0 0,-70px -50px!important}
+/* botão: sem placa, só o texto vermelho com contorno em pixel e ornamentos de adaga */
+.npanel .primary{background:none!important;box-shadow:none!important;border:0!important;min-height:48px!important;padding:4px 58px!important;margin:6px 0 0!important;white-space:nowrap!important;
+ font-family:"Jacquard 12",Cinzel,serif!important;font-weight:400!important;font-size:32px!important;line-height:1!important;letter-spacing:.02em!important;text-transform:none!important;color:#e8322c!important;
+ text-shadow:0 2px 0 #1a0505,0 -2px 0 #1a0505,2px 0 0 #1a0505,-2px 0 0 #1a0505,2px 2px 0 #1a0505,-2px 2px 0 #1a0505,0 4px 0 rgba(0,0,0,.5),0 0 14px rgba(255,60,40,.6)!important;transition:transform .12s steps(2),color .12s}
+.npanel .primary::before,.npanel .primary::after{content:""!important;display:block!important;position:absolute!important;z-index:0!important;top:50%!important;bottom:auto!important;width:48px!important;height:8px!important;margin-top:-3px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='8' shape-rendering='crispEdges'%3E%3Cpath fill='%231a0505' d='M0 2h34v4H0zM36 0h4v1h2v1h2v1h2v2h-2v1h-2v1h-2v1h-4V7h-2V6h-2V2h2V1h2z'/%3E%3Cpath fill='%23e8322c' d='M1 3h33v2H1zM37 1h2v1h2v1h2v2h-2v1h-2v1h-2V6h-2V2h2z'/%3E%3Cpath fill='%23ff8a6a' d='M37 2h2v1h-2z'/%3E%3C/svg%3E") 0 0/48px 8px no-repeat!important;image-rendering:pixelated}
+.npanel .primary::before{left:8px!important;right:auto!important}
+.npanel .primary::after{right:8px!important;left:auto!important;transform:scaleX(-1)}
+.npanel .primary:active{transform:translateY(2px) scale(.97)!important;box-shadow:none!important;color:#ff5a48!important}
+/* ===== Dungeon: barra de vida ligada à meta do mês (Vida = meta − gasto do mês) ===== */
+.hp{position:absolute;left:3px;right:3px;bottom:calc(100% + 34px);z-index:4;font-family:"Pixelify Sans",sans-serif;pointer-events:none}
+.hp-top{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:0 2px 4px;text-shadow:0 1px 0 #000,0 0 6px #000}
+.hp-lbl{display:flex;align-items:center;gap:6px;font-weight:700;font-size:13px;letter-spacing:.12em;color:#f3e2c0}
+.hp-heart{width:14px;height:12px;flex:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='6' shape-rendering='crispEdges'%3E%3Cpath fill='%23e8322c' d='M1 0h2v1H1zM4 0h2v1H4zM0 1h7v2H0zM1 3h5v1H1zM2 4h3v1H2zM3 5h1v1H3z'/%3E%3Cpath fill='%23ffb0a0' d='M1 1h1v1H1z'/%3E%3C/svg%3E") 0 0/14px 12px no-repeat;image-rendering:pixelated}
+.hp[data-tier="low"] .hp-heart{animation:hpBeat .5s steps(2) infinite}
+.hp-num{font-size:12px;color:#b9b5be;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hp-num b{font-weight:700;color:#f3e2c0}
+.hp[data-tier="ok"] .hp-num b{color:#7dff8a}.hp[data-tier="mid"] .hp-num b{color:#ffe066}.hp[data-tier="low"] .hp-num b,.hp[data-tier="dead"] .hp-num b{color:#ff6a5a}
+.hp-bar{position:relative;height:18px;background:#140d12;box-shadow:inset 0 0 0 2px #3d2a35,0 -2px 0 #0b090d,0 2px 0 #0b090d,-2px 0 0 #0b090d,2px 0 0 #0b090d,0 5px 0 rgba(0,0,0,.45)}
+.hp-fill,.hp-ghost{position:absolute;left:3px;top:3px;bottom:3px;width:calc((100% - 6px)*var(--p,0))}
+.hp-ghost{background:#ffe9b0;transition:width .7s .45s ease-in}
+.hp-fill{background:linear-gradient(#b8ffb0 0 2px,#3fd45a 2px 62%,#1f8a35 62%);transition:width .5s steps(10)}
+.hp[data-tier="mid"] .hp-fill{background:linear-gradient(#fff3a8 0 2px,#f2c12e 2px 62%,#a87612 62%)}
+.hp[data-tier="low"] .hp-fill,.hp[data-tier="dead"] .hp-fill{background:linear-gradient(#ffb0a0 0 2px,#e8322c 2px 62%,#8a1414 62%)}
+.hp[data-tier="low"] .hp-fill{animation:hpLow .8s steps(2) infinite}
+.hp[data-tier="none"] .hp-fill{background:#3a3440}
+.hp-bar::after{content:"";position:absolute;inset:3px;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),rgba(11,9,13,.55) calc(10% - 2px) 10%)}
+.hp-msg{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.08em;color:#f3e2c0;text-shadow:0 1px 0 #000,1px 0 0 #000,-1px 0 0 #000,0 -1px 0 #000}
+.hp-msg:empty{display:none}
+.hp[data-tier="dead"] .hp-msg{color:#ff6a5a;animation:hpBlink 1s steps(2) infinite}
+.hp.hit .hp-bar{animation:hpShake .36s steps(4)}
+.hp.hit .hp-fill{filter:brightness(2.2)}
+.hp.heal .hp-fill{filter:brightness(1.5) saturate(1.3)}
+.hp-pop{position:absolute;right:6px;bottom:40px;font-weight:700;font-size:18px;color:#ff4a3d;white-space:nowrap;text-shadow:0 2px 0 #1a0505,2px 0 0 #1a0505,-2px 0 0 #1a0505,0 -2px 0 #1a0505;animation:hpPop 1s steps(10) forwards}
+.hp-pop.cura{color:#7dff8a;text-shadow:0 2px 0 #052a0a,2px 0 0 #052a0a,-2px 0 0 #052a0a,0 -2px 0 #052a0a}
+@keyframes hpShake{25%{transform:translate(-4px,1px)}50%{transform:translate(4px,-1px)}75%{transform:translate(-2px,0)}}
+@keyframes hpPop{0%{opacity:0;transform:translateY(6px) scale(.8)}15%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-30px)}}
+@keyframes hpLow{50%{filter:brightness(1.35)}}
+@keyframes hpBlink{50%{opacity:.35}}
+@keyframes hpBeat{50%{transform:scale(1.25)}}
+/* tela de falha */
+.hp-over{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 45%,rgba(60,4,4,.88),rgba(8,0,0,.96) 70%);animation:hpFade .3s steps(3)}
+.hp-over[hidden]{display:none}
+.hp-ov-box{text-align:center;max-width:340px}
+.hp-ov-t{margin:0;font-family:"Jacquard 12",Cinzel,serif;font-size:64px;line-height:1;color:#e8322c;text-shadow:0 3px 0 #1a0505,0 -3px 0 #1a0505,3px 0 0 #1a0505,-3px 0 0 #1a0505,0 6px 0 rgba(0,0,0,.6),0 0 24px rgba(255,40,30,.7);animation:hpDrop .5s steps(5)}
+.hp-ov-s{margin:14px 0 22px;font-family:"Pixelify Sans",sans-serif;font-size:15px;line-height:1.4;color:#b9b5be;text-shadow:0 1px 0 #000}
+.hp-ov-s b{color:#ff6a5a}
+.hp-ov-b{width:auto!important;min-height:46px;padding:8px 28px!important;font-family:"Jacquard 12",Cinzel,serif!important;font-size:30px!important;font-weight:400!important;color:#f3e2c0!important;background:none!important;border:0!important;box-shadow:none!important;text-shadow:0 2px 0 #000,2px 0 0 #000,-2px 0 0 #000,0 -2px 0 #000}
+.hp-ov-b::before{content:"› "}.hp-ov-b::after{content:" ‹"}
+@keyframes hpFade{from{opacity:0}}
+@keyframes hpDrop{from{opacity:0;transform:translateY(-40px) scale(1.3)}}
 </style>
 </head>
 <body data-v="novo">
@@ -2057,6 +2196,69 @@ function renderSem(){
 }
 var _rtS=renderTav;renderTav=function(){_rtS.apply(this,arguments);renderSem()};
 renderSem();
+</script>
+<script>
+/* ===== Barra de vida da Dungeon =====
+   Vida = meta do mês − gasto do mês (mesma conta do render: gastos do ciclo + parcelas fixas).
+   Só lê os dados: não altera st, save() nem nenhuma função existente.
+   Atualiza sempre que o app chama render(): perdeu vida = dano; recuperou (desfazer/apagar) = cura. */
+(function(){
+  var painel=document.querySelector(".npanel");
+  if(!painel||typeof render!=="function")return;
+  var hp=document.createElement("div");
+  hp.className="hp";hp.id="hp";hp.setAttribute("role","meter");hp.setAttribute("aria-label","Vida do mês");
+  hp.setAttribute("aria-valuemin","0");hp.setAttribute("aria-valuemax","100");
+  hp.innerHTML='<div class="hp-top"><span class="hp-lbl"><i class="hp-heart" aria-hidden="true"></i>VIDA</span><span class="hp-num" id="hpNum"></span></div>'+
+    '<div class="hp-bar"><i class="hp-ghost" id="hpGhost"></i><i class="hp-fill" id="hpFill"></i><b class="hp-msg" id="hpMsg"></b></div>';
+  painel.insertBefore(hp,painel.firstChild);
+  var ov=document.createElement("div");
+  ov.className="hp-over";ov.id="hpOver";ov.hidden=true;ov.setAttribute("role","alertdialog");ov.setAttribute("aria-modal","true");ov.setAttribute("aria-labelledby","hpOvT");
+  ov.innerHTML='<div class="hp-ov-box"><p class="hp-ov-t" id="hpOvT">Você falhou</p><p class="hp-ov-s" id="hpOvS"></p><button type="button" class="hp-ov-b" id="hpOvB">Continuar</button></div>';
+  document.body.appendChild(ov);
+  function fecha(){ov.hidden=true}
+  ov.addEventListener("click",fecha);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ov.hidden)fecha()});
+
+  function calc(){
+    var c=ciclo(new Date()),g=0;
+    st.itens.forEach(function(i){if(i.d>=c.ini&&i.d<c.fim)g+=i.v});
+    g+=parcDo(c.mk).s;
+    return {meta:st.orc>0?st.orc:0,gasto:g};
+  }
+  var antes=null;
+  function pop(txt,cura){
+    var s=document.createElement("span");s.className="hp-pop"+(cura?" cura":"");s.textContent=txt;
+    hp.appendChild(s);setTimeout(function(){s.remove()},1100);
+    hp.classList.remove("hit","heal");void hp.offsetWidth;hp.classList.add(cura?"heal":"hit");
+    setTimeout(function(){hp.classList.remove("hit","heal")},420);
+  }
+  function atualiza(){
+    var d=calc(),fill=document.getElementById("hpFill"),ghost=document.getElementById("hpGhost"),num=document.getElementById("hpNum"),msg=document.getElementById("hpMsg");
+    if(!d.meta){
+      hp.dataset.tier="none";fill.style.setProperty("--p",0);ghost.style.setProperty("--p",0);
+      num.textContent="";msg.textContent="Defina a meta do mês na Guilda";hp.setAttribute("aria-valuenow","0");
+      antes=null;return;
+    }
+    var vida=d.meta-d.gasto,p=Math.max(0,Math.min(1,vida/d.meta));
+    hp.dataset.tier=vida<=0?"dead":p<=.25?"low":p<=.5?"mid":"ok";
+    fill.style.setProperty("--p",p);ghost.style.setProperty("--p",p);
+    hp.setAttribute("aria-valuenow",String(Math.round(p*100)));
+    if(vida>0){num.innerHTML="<b>"+brl(vida)+"</b> / "+brl(d.meta);msg.textContent=""}
+    else{num.innerHTML="Estourou <b>"+brl(-vida)+"</b>";msg.textContent="FALHOU"}
+    if(antes!==null&&antes.meta===d.meta&&Math.abs(vida-antes.vida)>.004){
+      var dif=vida-antes.vida;
+      pop((dif<0?"-":"+")+brl(Math.abs(dif)),dif>0);
+      if(antes.vida>0&&vida<=0){
+        document.getElementById("hpOvS").innerHTML="A meta do mês foi estourada em <b>"+brl(-vida)+"</b>.<br>Respire, aventureiro: o próximo mês é uma nova batalha.";
+        setTimeout(function(){ov.hidden=false;document.getElementById("hpOvB").focus()},450);
+      }
+    }
+    antes={meta:d.meta,vida:vida};
+  }
+  var base=render;
+  render=function(){var r=base.apply(this,arguments);try{atualiza()}catch(e){}return r};
+  try{atualiza()}catch(e){}
+})();
 </script>
 </body>
 </html>
